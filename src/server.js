@@ -1,29 +1,66 @@
-const express = require('express');
-const cors = require('cors');
 const path = require('path');
-const runcodeRouter = require('./utils/runcode');
-const { marked } = require('marked');
-const sanitizeHtml = require('sanitize-html');
+
+const Sentry = require('@sentry/node');
+const Tracing = require('@sentry/tracing');
+const cors = require('cors');
+const express = require('express');
+const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const hpp = require('hpp');
-const rateLimit = require('express-rate-limit');
+const { marked } = require('marked');
+const sanitizeHtml = require('sanitize-html');
 
-const logger = require('./utils/logger');
-const { validate, schemas } = require('./utils/validators');
 const { errorHandler, notFoundHandler, handleUncaughtErrors } = require('./utils/errorHandler');
+const logger = require('./utils/logger');
+const runcodeRouter = require('./utils/runcode');
+const { validate, schemas } = require('./utils/validators');
 
 const app = express();
 const port = process.env.PORT || 3000;
 const host = process.env.HOST || 'localhost';
 
+// Initialisation de Sentry
+if (process.env.SENTRY_DSN) {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    environment: process.env.NODE_ENV,
+    integrations: [
+      new Sentry.Integrations.Http({ tracing: true }),
+      new Tracing.Integrations.Express({ app }),
+    ],
+    tracesSampleRate: parseFloat(process.env.SENTRY_TRACES_SAMPLE_RATE) || 1.0,
+  });
+
+  // Middleware de Sentry
+  app.use(Sentry.Handlers.requestHandler());
+  app.use(Sentry.Handlers.tracingHandler());
+}
+
 // Configuration de base
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  })
+);
+
 app.use(
   helmet({
-    contentSecurityPolicy: false, // Désactivé pour le développement
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", 'https://cdn.jsdelivr.net'],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+        imgSrc: ["'self'", 'data:', 'https:'],
+        connectSrc: ["'self'", 'https://api.ipify.org'],
+      },
+    },
     crossOriginEmbedderPolicy: false,
   })
 );
+
 app.use(hpp());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, '../public')));
@@ -104,6 +141,9 @@ app.get('/test', (req, res) => {
 app.use(notFoundHandler);
 
 // Gestion des erreurs globale
+if (process.env.SENTRY_DSN) {
+  app.use(Sentry.Handlers.errorHandler());
+}
 app.use(errorHandler);
 
 // Démarrage du serveur

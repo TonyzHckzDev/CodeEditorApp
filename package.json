@@ -1,42 +1,52 @@
 {
   "name": "code-editor-app",
   "version": "1.0.0",
-  "description": "Une mini-application Telegram pour éditer et exécuter du code",
-  "main": "src/server.js",
+  "description": "Éditeur de code en ligne avec intégration Telegram",
+  "main": "src/index.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
-    "dev:mobile": "NODE_ENV=development PORT=3000 HOST=0.0.0.0 nodemon src/server.js",
-    "build": "tailwindcss -i src/styles/tailwind.css -o public/styles/tailwind.css --minify",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "tailwindcss -i src/styles/tailwind.css -o public/styles/tailwind.css --minify",
+    "build:js": "webpack --mode production",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx",
+    "lint:fix": "eslint . --ext .js,.jsx --fix",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "prepare": "husky install"
   },
   "dependencies": {
+    "@sentry/node": "^7.120.3",
+    "@sentry/tracing": "^7.120.3",
+    "celebrate": "^15.0.1",
     "cors": "^2.8.5",
-    "dotenv-flow": "^3.2.0",
-    "express": "^4.17.1",
-    "express-rate-limit": "^6.0.0",
-    "helmet": "^5.0.0",
-    "hpp": "^0.2.3",
-    "joi": "^17.6.0",
-    "marked": "^15.0.9",
-    "monaco-editor": "^0.34.0",
-    "sanitize-html": "^2.16.0",
-    "tailwindcss": "^3.0.0",
-    "winston": "^3.17.0"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
+    "helmet": "^6.1.5",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.0",
+    "monaco-editor": "^0.52.2"
   },
   "devDependencies": {
-    "eslint": "^8.0.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.3.0",
-    "husky": "^7.0.0",
-    "jest": "^27.4.0",
-    "lint-staged": "^12.0.0",
-    "nodemon": "^2.0.15",
-    "prettier": "^2.5.0"
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "autoprefixer": "^10.4.14",
+    "babel-loader": "^9.1.2",
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
+    "jest": "^29.5.0",
+    "lint-staged": "^13.2.1",
+    "nodemon": "^2.0.22",
+    "postcss": "^8.4.23",
+    "prettier": "^2.8.7",
+    "supertest": "^6.3.3",
+    "tailwindcss": "^3.3.1",
+    "webpack": "^5.79.0",
+    "webpack-cli": "^5.0.1"
   },
   "lint-staged": {
     "*.{js,jsx}": [
@@ -46,5 +56,14 @@
     "*.{json,md}": [
       "prettier --write"
     ]
-  }
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TonyzHckzDev/CodeEditorApp.git"
+  },
+  "author": "TonyzHckzDev",
+  "license": "MIT"
 }
