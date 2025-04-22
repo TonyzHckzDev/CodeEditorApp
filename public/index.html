@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeEditor</title>
+    <!-- Styles compilés -->
+    <link href="./styles/tailwind.css" rel="stylesheet" />
+    <link href="./styles/theme.css" rel="stylesheet" />
+    <!-- Monaco Editor Styles -->
+    <link
+      rel="stylesheet"
+      data-name="vs/editor/editor.main"
+      href="https://cdn.jsdelivr.net/npm/monaco-editor@0.33.0/min/vs/editor/editor.main.css"
+    />
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Animate.css pour les animations -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body class="bg-gray-100 text-gray-800 h-screen flex flex-col tg-theme-bg">
+    <!-- Barre latérale -->
+    <nav class="sidebar">
+      <div class="sidebar-icon active" title="Fichiers">
+        <i class="fas fa-file"></i>
+      </div>
+      <div class="sidebar-icon" title="Dossiers">
+        <i class="fas fa-folder"></i>
+      </div>
+      <div class="sidebar-icon" title="Paramètres">
+        <i class="fas fa-cog"></i>
+      </div>
+      <div class="sidebar-icon" title="Notifications">
+        <i class="fas fa-bell"></i>
+      </div>
+      <div class="sidebar-icon" title="Plus d'options">
+        <i class="fas fa-ellipsis-v"></i>
+      </div>
+    </nav>
+
+    <!-- En-tête -->
+    <header class="header">
+      <div class="header-title">untitled.txt</div>
+      <div class="header-actions">
+        <button class="toolbar-button" title="Éditer">
+          <i class="fas fa-pencil"></i>
+        </button>
+        <button class="toolbar-button" title="Plus d'options">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Conteneur principal -->
+    <main id="app" class="flex-1 overflow-hidden">
+      <!-- Page Accueil -->
+      <section
+        id="page-home"
+        class="p-6 hidden animate__animated animate__fadeIn"
+      >
+        <h2 class="text-lg font-semibold mb-4">Bienvenue</h2>
+        <p class="animate__animated animate__fadeInUp">
+          Bienvenue dans CodeEditor pour Telegram.
+        </p>
+      </section>
+      <!-- Page Éditeur -->
+      <section id="page-editor" class="flex h-full hidden">
+        <!-- Sidebar -->
+        <aside
+          class="w-1/4 bg-white border-r p-4 overflow-auto tg-theme-secondary-bg"
+        >
+          <h3 class="font-semibold mb-2 animate__animated animate__fadeIn">
+            Langage
+          </h3>
+          <label for="language-select" class="sr-only"
+            >Sélectionner un langage de programmation</label
+          >
+          <select
+            id="language-select"
+            class="w-full border rounded p-2 mb-4 transition-all duration-300"
+            aria-label="Sélectionner un langage de programmation"
+          >
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="javascript">JavaScript</option>
+            <option value="python">Python</option>
+            <option value="java">Java</option>
+          </select>
+          <button
+            id="btn-run"
+            class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-all duration-300 animate__animated animate__pulse"
+          >
+            Exécuter
+          </button>
+        </aside>
+        <!-- Éditeur Monaco -->
+        <div
+          id="editor-container"
+          class="flex-1 animate__animated animate__fadeIn"
+        ></div>
+        <!-- Conteneur d'aperçu -->
+        <div
+          id="preview-container"
+          class="w-1/4 bg-white border-l p-4 overflow-auto tg-theme-secondary-bg animate__animated animate__fadeIn"
+        ></div>
+      </section>
+
+      <!-- Page Snippets -->
+      <section
+        id="page-snippets"
+        class="p-6 hidden overflow-auto animate__animated animate__fadeIn"
+      >
+        <h2 class="text-lg font-semibold mb-4">Mes Snippets</h2>
+        <ul id="snippets-list" class="space-y-2"></ul>
+        <button
+          id="btn-add-snippet"
+          class="mt-4 bg-green-500 text-white p-2 rounded hover:bg-green-600 transition-all duration-300 animate__animated animate__pulse"
+        >
+          Ajouter Snippet
+        </button>
+      </section>
+
+      <!-- Page Paramètres -->
+      <section
+        id="page-settings"
+        class="p-6 hidden animate__animated animate__fadeIn"
+      >
+        <h2 class="text-lg font-semibold mb-4">Paramètres</h2>
+        <label class="flex items-center mb-4 transition-all duration-300">
+          <input type="checkbox" id="toggle-theme" class="mr-2" /> Thème sombre
+        </label>
+        <label class="flex items-center transition-all duration-300">
+          <input type="checkbox" id="toggle-autosave" class="mr-2" /> Sauvegarde
+          automatique
+        </label>
+      </section>
+    </main>
+    <!-- Footer avec bouton Telegram -->
+    <footer class="bg-white shadow-inner p-4 text-center tg-theme-footer">
+      <button
+        id="btn-send-to-bot"
+        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-all duration-300 animate__animated animate__pulse"
+      >
+        Envoyer au Bot
+      </button>
+    </footer>
+    <!-- Scripts -->
+    <!-- Monaco Editor -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.33.0/min/vs/loader.js"></script>
+    <!-- Script principal -->
+    <script type="module" src="./src/index.js"></script>
+  </body>
+</html>

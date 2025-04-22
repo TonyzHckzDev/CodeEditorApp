@@ -1,0 +1,25 @@
+// editor.js - gestion de l'éditeur et interactions
+
+// Initialisation de l'API Telegram WebApp const tg = window.Telegram.WebApp; tg.expand(); // Étendre le WebApp pour occuper tout l'écran
+
+// Gestion des pages (Accueil, Éditeur, Snippets, Paramètres) const pages = { home: document.getElementById('page-home'), editor: document.getElementById('page-editor'), snippets: document.getElementById('page-snippets'), settings: document.getElementById('page-settings') }; const navButtons = { home: document.getElementById('btn-home'), editor: document.getElementById('btn-editor'), snippets: document.getElementById('btn-snippets'), settings: document.getElementById('btn-settings') };
+
+function showPage(key) { Object.keys(pages).forEach(k => { pages[k].classList.toggle('hidden', k !== key); }); } Object.keys(navButtons).forEach(key => { navButtons[key].addEventListener('click', () => showPage(key)); }); // Affichage initial showPage('home');
+
+// Initialisation de Monaco Editor require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.33.0/min/vs' } }); require(['vs/editor/editor.main'], function () { window.editor = monaco.editor.create(document.getElementById('editor-container'), { value: '<!-- Commencez à coder... -->', language: 'html', theme: 'vs-light', automaticLayout: true, minimap: { enabled: false } }); });
+
+// Changement de langage const languageSelect = document.getElementById('language-select'); languageSelect.addEventListener('change', (e) => { const lang = e.target.value; monaco.editor.setModelLanguage(window.editor.getModel(), lang); });
+
+// Exécution du code const runButton = document.getElementById('btn-run'); runButton.addEventListener('click', async () => { const code = window.editor.getValue(); const lang = languageSelect.value; if (['html', 'css', 'javascript'].includes(lang)) { // Live preview pour front-end const preview = document.getElementById('editor-container').querySelector('iframe'); if (!preview) { const iframe = document.createElement('iframe'); iframe.className = 'w-full h-full border-0'; document.getElementById('editor-container').innerHTML = ''; document.getElementById('editor-container').appendChild(iframe); iframe.srcdoc = lang === 'html' ? code : lang === 'css' ? <style>${code}</style> : <script>${code}</script>; } else { preview.srcdoc = lang === 'html' ? code : lang === 'css' ? <style>${code}</style> : <script>${code}</script>; } } else { // Appel à l'API serveur pour Python/Java try { const res = await fetch(/run/${lang}, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }) }); const json = await res.json(); alert(Résultat (${lang}):\n + json.output); } catch (err) { console.error(err); alert('Erreur lors de l’exécution du code.'); } } });
+
+// Envoi du code au bot Telegram const sendButton = document.getElementById('btn-send-to-bot'); sendButton.addEventListener('click', () => { const payload = { code: window.editor.getValue(), language: languageSelect.value }; tg.sendData(JSON.stringify(payload)); });
+
+// Thème sombre / clair const themeToggle = document.getElementById('toggle-theme'); themeToggle.addEventListener('change', (e) => { const theme = e.target.checked ? 'vs-dark' : 'vs-light'; monaco.editor.setTheme(theme); });
+
+// Sauvegarde automatique const autosaveToggle = document.getElementById('toggle-autosave'); autosaveToggle.addEventListener('change', (e) => { if (e.target.checked) { setInterval(() => { const snippets = JSON.parse(localStorage.getItem('snippets') || '[]'); snippets.push({ id: Date.now(), language: languageSelect.value, content: window.editor.getValue() }); localStorage.setItem('snippets', JSON.stringify(snippets)); }, 30000); // toutes les 30s } });
+
+// Chargement des snippets function loadSnippets() { const list = document.getElementById('snippets-list'); const snippets = JSON.parse(localStorage.getItem('snippets') || '[]'); list.innerHTML = ''; snippets.forEach(snip => { const li = document.createElement('li'); li.className = 'p-2 bg-white border rounded flex justify-between items-center'; li.innerHTML = <span>${snip.language} - ${new Date(snip.id).toLocaleString()}</span> + <button data-id="${snip.id}" class="text-red-500">Supprimer</button>; list.appendChild(li); }); } loadSnippets();
+
+// Ajouter / supprimer snippets manuellement const addSnippetBtn = document.getElementById('btn-add-snippet'); addSnippetBtn.addEventListener('click', () => { const snippets = JSON.parse(localStorage.getItem('snippets') || '[]'); snippets.push({ id: Date.now(), language: languageSelect.value, content: window.editor.getValue() }); localStorage.setItem('snippets', JSON.stringify(snippets)); loadSnippets(); });
+
+document.getElementById('snippets-list').addEventListener('click', (e) => { if (e.target.matches('button[data-id]')) { const id = Number(e.target.dataset.id); let snippets = JSON.parse(localStorage.getItem('snippets') || '[]'); snippets = snippets.filter(s => s.id !== id); localStorage.setItem('snippets', JSON.stringify(snippets)); loadSnippets(); } });

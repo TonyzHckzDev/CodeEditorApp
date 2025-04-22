@@ -1,0 +1,193 @@
+/* Variables de thème par défaut */
+:root {
+  /* Couleurs de fond */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f4f6;
+
+  /* Couleurs de texte */
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+
+  /* Couleurs d'accent */
+  --accent-primary: #3b82f6;
+  --accent-secondary: #60a5fa;
+
+  /* Couleurs utilitaires */
+  --border-color: #e5e7eb;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --error-color: #e74c3c;
+  --success-color: #2ecc71;
+  --warning-color: #f1c40f;
+  --info-color: #3498db;
+}
+
+/* Classes de thème */
+.theme-light {
+  /* Les variables sont déjà définies dans :root */
+}
+
+.theme-dark {
+  --bg-primary: #1f2937;
+  --bg-secondary: #111827;
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --accent-primary: #60a5fa;
+  --accent-secondary: #3b82f6;
+  --border-color: #374151;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --error-color: #ef4444;
+  --success-color: #34d399;
+  --warning-color: #fbbf24;
+  --info-color: #60a5fa;
+}
+
+/* Styles de base utilisant les variables */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Éléments communs */
+.card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+.button {
+  background-color: var(--accent-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  background-color: var(--accent-secondary);
+  transform: translateY(-1px);
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-secondary);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+/* États et messages */
+.error {
+  color: var(--error-color);
+}
+
+.success {
+  color: var(--success-color);
+}
+
+.warning {
+  color: var(--warning-color);
+}
+
+.info {
+  color: var(--info-color);
+}
+
+/* Éditeur */
+.editor-container {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+.editor-header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.5rem;
+}
+
+.editor-content {
+  background-color: var(--bg-primary);
+  padding: 1rem;
+}
+
+/* Sélecteur de thème */
+.theme-selector {
+  position: relative;
+  margin: 1rem;
+  padding: 0.5rem;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+
+.theme-selector:hover {
+  box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+.theme-select {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-select:hover {
+  border-color: var(--accent-primary);
+}
+
+.theme-select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--accent-secondary);
+}
+
+.theme-select option {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 0.5rem;
+}
+
+/* Transitions fluides pour les changements de thème */
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+/* États de focus globaux */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* États de hover globaux */
+@media (hover: hover) {
+  .hover\:scale:hover {
+    transform: scale(1.05);
+  }
+
+  .hover\:shadow:hover {
+    box-shadow: 0 4px 6px var(--shadow-color);
+  }
+}

@@ -1,0 +1,274 @@
+/* tailwind.css - Configuration de TailwindCSS et styles personnalisés */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================== Styles globaux et personnalisés ============================== */
+
+/* Couleurs, thèmes clair/sombre */
+html {
+  /* Mode clair par défaut */
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html.dark {
+  /* Activer le mode sombre */
+  color-scheme: dark;
+}
+
+/* Body full-height layout */
+body {
+  @apply min-h-screen flex flex-col;
+}
+
+/* Header */
+header {
+  @apply bg-white dark:bg-gray-800 shadow-md p-4 flex justify-between items-center;
+}
+
+/* Footer */
+footer {
+  @apply bg-white dark:bg-gray-800 shadow-inner p-4 text-center;
+}
+
+/* Navigation Buttons */
+nav button {
+  @apply text-gray-700 dark:text-gray-200 px-3 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700;
+}
+
+nav button.active {
+  @apply font-semibold bg-gray-200 dark:bg-gray-700;
+}
+
+/* Sidebar */
+aside {
+  @apply bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 p-4 overflow-auto;
+}
+
+/* Editor Container */
+#editor-container {
+  @apply flex-1 overflow-hidden;
+}
+
+/* Iframe de preview */
+#editor-container iframe {
+  @apply w-full h-full border-0;
+}
+
+/* Snippets list */
+#snippets-list li {
+  @apply p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded flex justify-between items-center;
+}
+
+#snippets-list li button {
+  @apply text-red-500;
+}
+
+/* Buttons primary and secondary */
+.btn-primary {
+  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700;
+}
+
+.btn-secondary {
+  @apply bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600;
+}
+
+/* Form Controls */
+input[type="checkbox"],
+select,
+input[type="number"] {
+  @apply mt-1 block;
+}
+
+/* Responsive utilities */
+@screen md {
+  aside {
+    @apply block;
+  }
+}
+
+@screen sm {
+  .mobile-hide {
+    @apply hidden;
+  }
+  .mobile-show {
+    @apply block;
+  }
+}
+
+/* Mobile-specific styles */
+@media (max-width: 640px) {
+  /* Header */
+  header {
+    @apply flex-col space-y-2;
+  }
+
+  header h1 {
+    @apply text-lg;
+  }
+
+  nav {
+    @apply w-full flex justify-between;
+  }
+
+  nav button {
+    @apply text-sm px-2 py-1;
+  }
+
+  /* Editor layout */
+  #page-editor {
+    @apply flex-col;
+  }
+
+  aside {
+    @apply w-full border-r-0 border-b;
+  }
+
+  #editor-container {
+    @apply h-64;
+  }
+
+  #preview-container {
+    @apply w-full border-l-0 border-t;
+  }
+
+  /* Snippets */
+  #snippets-list li {
+    @apply flex-col space-y-2;
+  }
+
+  /* Settings */
+  #page-settings {
+    @apply space-y-4;
+  }
+
+  /* Footer */
+  footer {
+    @apply p-2;
+  }
+
+  footer button {
+    @apply w-full;
+  }
+}
+
+/* Dark mode improvements */
+.dark #editor-container {
+  @apply bg-gray-900;
+}
+
+.dark #preview-container {
+  @apply bg-gray-800 text-white;
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) {
+  button,
+  select,
+  input[type="checkbox"] {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  nav button {
+    @apply py-2;
+  }
+}
+
+/* Telegram-specific styles */
+.tg-theme-bg {
+  background-color: var(--tg-theme-bg-color, #ffffff);
+  color: var(--tg-theme-text-color, #000000);
+}
+
+.tg-theme-header {
+  background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
+}
+
+.tg-theme-footer {
+  background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
+}
+
+.tg-theme-secondary-bg {
+  background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
+}
+
+/* Animation classes */
+.nav-btn {
+  @apply transform transition-all duration-300;
+}
+
+.nav-btn:hover {
+  @apply scale-105;
+}
+
+.nav-btn.active {
+  @apply scale-110;
+}
+
+/* Page transitions */
+.page-enter {
+  @apply opacity-0 transform translate-x-4;
+}
+
+.page-enter-active {
+  @apply opacity-100 transform translate-x-0 transition-all duration-300;
+}
+
+.page-exit {
+  @apply opacity-100 transform translate-x-0;
+}
+
+.page-exit-active {
+  @apply opacity-0 transform -translate-x-4 transition-all duration-300;
+}
+
+/* Button animations */
+.btn-animate {
+  @apply transform transition-all duration-300;
+}
+
+.btn-animate:hover {
+  @apply scale-105 shadow-lg;
+}
+
+.btn-animate:active {
+  @apply scale-95;
+}
+
+/* Loading animations */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Snippet card animations */
+.snippet-card {
+  @apply transform transition-all duration-300;
+}
+
+.snippet-card:hover {
+  @apply scale-105 shadow-md;
+}
+
+/* Mobile gesture animations */
+@media (max-width: 640px) {
+  .swipe-left {
+    @apply transform -translate-x-full transition-transform duration-300;
+  }
+
+  .swipe-right {
+    @apply transform translate-x-full transition-transform duration-300;
+  }
+}
