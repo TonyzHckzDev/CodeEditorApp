@@ -1,8 +1,38 @@
 /* tailwind.css - Configuration de TailwindCSS et styles personnalisés */
 
+/* Import des polices */
+@import "@fontsource/fira-code";
+@import "@fontsource/inter";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html,
+  :host {
+    line-height: 1.5;
+    /* 1 */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* 2 */
+    -moz-tab-size: 4;
+    /* 3 */
+    -o-tab-size: 4;
+    tab-size: 4;
+    /* 3 */
+    font-family: Inter, sans-serif;
+    /* 4 */
+    font-feature-settings: normal;
+    /* 5 */
+    font-variation-settings: normal;
+    /* 6 */
+    -webkit-tap-highlight-color: transparent;
+    /* 7 */
+  }
+}
 
 /* ============================== Styles globaux et personnalisés ============================== */
 
@@ -22,6 +52,12 @@ html.dark {
 /* Body full-height layout */
 body {
   @apply min-h-screen flex flex-col;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  margin: 0;
+  line-height: inherit;
 }
 
 /* Header */
@@ -36,7 +72,7 @@ footer {
 
 /* Navigation Buttons */
 nav button {
-  @apply text-gray-700 dark:text-gray-200 px-3 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700;
+  @apply text-gray-700 dark:text-gray-200 px-3 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200;
 }
 
 nav button.active {
@@ -53,6 +89,12 @@ aside {
   @apply flex-1 overflow-hidden;
 }
 
+/* Code Editor */
+.CodeMirror {
+  @apply font-mono text-sm;
+  font-family: "Fira Code", monospace;
+}
+
 /* Iframe de preview */
 #editor-container iframe {
   @apply w-full h-full border-0;
@@ -60,20 +102,20 @@ aside {
 
 /* Snippets list */
 #snippets-list li {
-  @apply p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded flex justify-between items-center;
+  @apply p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded flex justify-between items-center hover:shadow-editor dark:hover:shadow-editor-dark transition-shadow duration-200;
 }
 
 #snippets-list li button {
-  @apply text-red-500;
+  @apply text-red-500 hover:text-red-600 transition-colors duration-200;
 }
 
 /* Buttons primary and secondary */
 .btn-primary {
-  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700;
+  @apply bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark transition-colors duration-200;
 }
 
 .btn-secondary {
-  @apply bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600;
+  @apply bg-secondary text-white px-4 py-2 rounded hover:bg-secondary-dark transition-colors duration-200;
 }
 
 /* Form Controls */
@@ -271,4 +313,11 @@ input[type="number"] {
   .swipe-right {
     @apply transform translate-x-full transition-transform duration-300;
   }
+}
+
+.text-size-adjust {
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }

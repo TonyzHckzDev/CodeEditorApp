@@ -121,6 +121,48 @@ export class ContextMenu {
     this.show(x, y, items);
   }
 
+  // Menu contextuel pour l'éditeur
+  showEditorMenu(x, y, editor) {
+    const items = [
+      {
+        label: "Copier",
+        icon: "copy",
+        action: () =>
+          editor.getAction("editor.action.clipboardCopyAction").run(),
+      },
+      {
+        label: "Couper",
+        icon: "cut",
+        action: () =>
+          editor.getAction("editor.action.clipboardCutAction").run(),
+      },
+      {
+        label: "Coller",
+        icon: "paste",
+        action: () =>
+          editor.getAction("editor.action.clipboardPasteAction").run(),
+      },
+      {
+        label: "Sélectionner tout",
+        icon: "object-group",
+        action: () => editor.getAction("editor.action.selectAll").run(),
+      },
+      {
+        label: "Rechercher",
+        icon: "search",
+        action: () => editor.getAction("actions.find").run(),
+      },
+      {
+        label: "Remplacer",
+        icon: "exchange-alt",
+        action: () =>
+          editor.getAction("editor.action.startFindReplaceAction").run(),
+      },
+    ];
+
+    this.show(x, y, items);
+  }
+
   // Définir les callbacks
   setCallbacks({
     onRename,

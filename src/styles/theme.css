@@ -1,31 +1,36 @@
 /* Variables de thème par défaut */
 :root {
-  /* Couleurs de fond */
-  --bg-primary: #1a1b26;
-  --bg-secondary: #24283b;
-  --bg-tertiary: #414868;
+  /* Couleurs de base */
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #252526;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --accent-color: #007acc;
+  --accent-primary: #ffa657;
+  --accent-secondary: #7c5c3c;
 
-  /* Couleurs de texte */
-  --text-primary: #c0caf5;
-  --text-secondary: #7982a9;
+  /* Couleurs de l'interface */
+  --header-bg: #252526;
+  --sidebar-bg: #252526;
+  --editor-bg: #1e1e1e;
+  --editor-text: #d4d4d4;
+  --toolbar-bg: #333333;
 
-  /* Couleurs d'accent */
-  --accent-primary: #ff9e64;
-  --accent-secondary: #f7768e;
+  /* Éléments d'interface */
+  --border-color: #333333;
+  --icon-color: #ffa657;
+  --icon-hover: #ffb77a;
 
   /* Couleurs utilitaires */
-  --border-color: #292e42;
-  --shadow-color: rgba(0, 0, 0, 0.3);
-  --error-color: #f7768e;
-  --success-color: #9ece6a;
-  --warning-color: #e0af68;
-  --info-color: #7aa2f7;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --error-color: #e74c3c;
+  --success-color: #2ecc71;
+  --warning-color: #f1c40f;
+  --info-color: #3498db;
 }
 
 /* Classes de thème */
-.theme-light {
-  /* Les variables sont déjà définies dans :root */
-}
+/* Les variables sont déjà définies dans :root pour le thème clair */
 
 .theme-dark {
   --bg-primary: #1f2937;
@@ -48,13 +53,16 @@ body {
   color: var(--text-primary);
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: "Inter", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Empêcher l'ajustement automatique de la taille du texte sur les appareils mobiles */
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
 }
 
 /* Barre latérale */
@@ -63,58 +71,131 @@ body {
   left: 0;
   top: 0;
   bottom: 0;
-  width: 60px;
+  width: 16rem;
   background-color: var(--bg-secondary);
   border-right: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 1rem;
-  z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 50;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-.sidebar-icon {
-  width: 40px;
-  height: 40px;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
-  cursor: pointer;
-  border-radius: 8px;
-  -webkit-transition: all 0.2s ease;
-  -moz-transition: all 0.2s ease;
-  -o-transition: all 0.2s ease;
-  transition: all 0.2s ease;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.sidebar.open {
+  transform: translateX(0);
 }
 
-.sidebar-icon:hover {
-  background-color: var(--bg-tertiary);
+/* Styles pour le bouton de fermeture */
+.sidebar-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  background: transparent;
   color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.sidebar-icon.active {
-  background-color: var(--bg-tertiary);
-  color: var(--accent-primary);
+.sidebar-close:hover {
+  background-color: var(--bg-hover);
+}
+
+/* Styles pour les sections du menu */
+.sidebar-section {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar-section:last-child {
+  border-bottom: none;
+}
+
+.sidebar-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+/* Styles pour les boutons du menu */
+.sidebar-button {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  background-color: transparent;
+  color: var(--text-primary);
+  text-align: left;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sidebar-button:hover {
+  background-color: var(--bg-hover);
+}
+
+.sidebar-button i {
+  width: 1.25rem;
+  text-align: center;
+}
+
+/* Styles pour les entrées du menu */
+.sidebar-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: border-color 0.2s;
+}
+
+.sidebar-input:focus {
+  border-color: var(--accent-primary);
+  outline: none;
+}
+
+/* Accessibilité */
+.sidebar-button:focus-visible,
+.sidebar-input:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* Support du mode sombre */
+@media (prefers-color-scheme: dark) {
+  .sidebar {
+    background-color: var(--bg-secondary-dark);
+  }
+
+  .sidebar-button:hover {
+    background-color: var(--bg-hover-dark);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .sidebar {
+    width: 100%;
+  }
 }
 
 /* En-tête */
 .header {
   position: fixed;
   top: 0;
-  left: 60px;
+  left: 3rem;
   right: 0;
-  height: 50px;
-  background-color: var(--bg-secondary);
+  height: 3rem;
+  background-color: var(--header-bg);
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
-  padding: 0 1rem;
+  padding: 0.5rem 1rem;
   z-index: 900;
 }
 
@@ -133,40 +214,43 @@ body {
 /* Éditeur */
 .editor-container {
   position: fixed;
-  top: 50px;
-  left: 60px;
+  top: 3rem;
+  left: 3rem;
   right: 0;
   bottom: 50px;
-  background-color: var(--bg-primary);
+  background-color: var(--editor-bg);
+  color: var(--editor-text);
+  flex: 1;
 }
 
 /* Barre d'outils inférieure */
 .toolbar {
   position: fixed;
   bottom: 0;
-  left: 60px;
+  left: 3rem;
   right: 0;
-  height: 50px;
-  background-color: var(--bg-secondary);
+  height: 3rem;
+  background-color: var(--toolbar-bg);
   border-top: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 0 1rem;
+  padding: 0.5rem;
 }
 
 .toolbar-button {
   color: var(--text-secondary);
-  background: none;
+  background: transparent;
   border: none;
-  padding: 8px;
+  padding: 0.5rem;
   cursor: pointer;
-  font-size: 1.2rem;
-  transition: color 0.2s ease;
+  transition: background-color 0.2s;
+  border-radius: 4px;
+  margin: 0 0.25rem;
 }
 
 .toolbar-button:hover {
-  color: var(--accent-primary);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Bouton flottant */
@@ -194,6 +278,8 @@ body {
   transition: all 0.2s ease;
   z-index: 1000;
   -webkit-tap-highlight-color: transparent;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .floating-button:hover {
@@ -268,7 +354,7 @@ body {
 
 /* Éditeur */
 .editor-container {
-  background-color: var(--bg-secondary);
+  background-color: var(--editor-bg);
   border: 1px solid var(--border-color);
   box-shadow: 0 2px 4px var(--shadow-color);
   transition: all 0.3s ease;
@@ -364,20 +450,17 @@ body {
 
 /* Styles responsifs */
 @media (max-width: 768px) {
-  .sidebar {
-    width: 50px;
-  }
-
   .header {
-    left: 50px;
+    left: 2.5rem;
+    height: 2.5rem;
   }
 
   .editor-container {
-    left: 50px;
+    left: 2.5rem;
   }
 
   .toolbar {
-    left: 50px;
+    left: 2.5rem;
   }
 
   .container {
@@ -445,10 +528,6 @@ body {
 
 /* Styles pour l'orientation paysage sur mobile */
 @media (max-height: 480px) and (orientation: landscape) {
-  .sidebar {
-    width: 40px;
-  }
-
   .header {
     left: 40px;
     height: 40px;
@@ -474,12 +553,13 @@ body {
   border-bottom: 1px solid var(--border-color);
   height: 40px;
   white-space: nowrap;
-  scrollbar-width: thin;
-  scrollbar-color: var(--accent-primary) var(--bg-secondary);
+  overflow: auto;
 }
 
+/* Styles de la scrollbar personnalisée */
 .tabs-container::-webkit-scrollbar {
   height: 3px;
+  width: 3px;
 }
 
 .tabs-container::-webkit-scrollbar-track {
@@ -489,6 +569,14 @@ body {
 .tabs-container::-webkit-scrollbar-thumb {
   background-color: var(--accent-primary);
   border-radius: 3px;
+}
+
+/* Support Firefox */
+@supports (scrollbar-width: thin) {
+  .tabs-container {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-primary) var(--bg-secondary);
+  }
 }
 
 /* Style des onglets */
@@ -551,30 +639,65 @@ body {
   position: fixed;
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 4px;
-  padding: 4px 0;
-  min-width: 160px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border-radius: 0.375rem;
+  padding: 0.5rem 0;
+  min-width: 200px;
+  box-shadow: 0 4px 6px var(--shadow-color);
   z-index: 1000;
+  opacity: 1;
+  transform: scale(1);
+  transform-origin: top left;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.context-menu.hidden {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
 }
 
 .context-menu-item {
-  padding: 8px 12px;
-  cursor: pointer;
   display: flex;
   align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
   color: var(--text-primary);
-  transition: background-color 0.2s ease;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .context-menu-item:hover {
-  background-color: var(--bg-tertiary);
+  background-color: var(--accent-color);
+  color: #ffffff;
 }
 
 .context-menu-item i {
-  margin-right: 8px;
-  width: 16px;
+  width: 1.25rem;
+  text-align: center;
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+
+.context-menu-separator {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 0.25rem 0;
+}
+
+.context-menu-item .shortcut {
+  margin-left: auto;
+  font-size: 0.75rem;
+  opacity: 0.6;
   color: var(--text-secondary);
+}
+
+.context-menu-item:hover .shortcut {
+  color: #ffffff;
+  opacity: 0.8;
 }
 
 /* Arborescence des fichiers */
@@ -667,6 +790,11 @@ body {
 
 .monaco-editor {
   flex: 1;
+  padding-top: 0.5rem;
+}
+
+.monaco-editor .margin {
+  background-color: var(--editor-bg) !important;
 }
 
 /* Styles pour la prévisualisation Markdown */
@@ -797,4 +925,66 @@ body {
 /* Animation de transition pour les changements de thème */
 .markdown-preview * {
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Styles pour les sections de page */
+.page-section {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.page-section.hidden {
+  display: none;
+}
+
+/* Sélecteur de langage */
+#language-select {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+/* Scrollbar personnalisée */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-secondary);
+}
+
+/* Line numbers */
+.line-numbers {
+  color: var(--text-secondary);
+  background-color: var(--bg-secondary);
+  padding: 0 0.5rem;
+  text-align: right;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .toolbar {
+    height: 2.5rem;
+  }
+
+  .toolbar button {
+    padding: 0.25rem;
+  }
 }
