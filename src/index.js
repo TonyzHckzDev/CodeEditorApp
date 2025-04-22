@@ -1,13 +1,13 @@
 // CodeEditor Mini-App Telegram - Script principal
-import { marked } from "marked";
-import sanitizeHtml from "sanitize-html";
-import { ThemeSelector } from "./components/ThemeSelector.js";
-import { ContextMenu } from "./features/contextMenu.js";
-import { FileManager } from "./features/fileManager.js";
-import { SearchManager } from "./features/searchManager.js";
-import { SnippetManager } from "./features/snippetManager.js";
-import { TabManager } from "./features/tabManager.js";
-import { ThemeManager } from "./features/themes/theme-manager.js";
+import { marked } from 'marked';
+import sanitizeHtml from 'sanitize-html';
+import { ThemeSelector } from './components/ThemeSelector.js';
+import { ContextMenu } from './features/contextMenu.js';
+import { FileManager } from './features/fileManager.js';
+import { SearchManager } from './features/searchManager.js';
+import { SnippetManager } from './features/snippetManager.js';
+import { TabManager } from './features/tabManager.js';
+import { ThemeManager } from './features/themes/theme-manager.js';
 
 // Initialisation du gestionnaire de thèmes
 const themeManager = new ThemeManager();
@@ -22,26 +22,26 @@ marked.setOptions({
 function previewMarkdown(code) {
   const rawHtml = marked(code);
   const sanitizedHtml = sanitizeHtml(rawHtml, {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
     allowedAttributes: {
       ...sanitizeHtml.defaults.allowedAttributes,
-      img: ["src", "alt", "title"],
+      img: ['src', 'alt', 'title'],
     },
   });
   return sanitizedHtml;
 }
 
 // Initialisation du sélecteur de thèmes
-const themeContainer = document.createElement("div");
+const themeContainer = document.createElement('div');
 document.body.insertBefore(themeContainer, document.body.firstChild);
 const themeSelector = new ThemeSelector(themeContainer);
 
 // Initialisation des gestionnaires
 const fileManager = new FileManager();
 const tabManager = new TabManager(
-  document.getElementById("editor-container"),
-  (path) => openFile(path),
-  (path) => closeFile(path)
+  document.getElementById('editor-container'),
+  path => openFile(path),
+  path => closeFile(path)
 );
 const contextMenu = new ContextMenu();
 let searchManager = null;
@@ -50,30 +50,30 @@ const snippetManager = new SnippetManager();
 let editor = null;
 
 // Gestion du menu latéral
-const sidebar = document.getElementById("sidebar");
-const toggleSidebarBtn = document.getElementById("toggle-sidebar");
-const closeSidebarBtn = document.getElementById("close-sidebar");
+const sidebar = document.getElementById('sidebar');
+const toggleSidebarBtn = document.getElementById('toggle-sidebar');
+const closeSidebarBtn = document.getElementById('close-sidebar');
 
 // Fonction pour ouvrir le menu
 function openSidebar() {
-  sidebar.classList.remove("-translate-x-full");
+  sidebar.classList.remove('-translate-x-full');
 }
 
 // Fonction pour fermer le menu
 function closeSidebar() {
-  sidebar.classList.add("-translate-x-full");
+  sidebar.classList.add('-translate-x-full');
 }
 
 // Événements pour le menu
-toggleSidebarBtn.addEventListener("click", openSidebar);
-closeSidebarBtn.addEventListener("click", closeSidebar);
+toggleSidebarBtn.addEventListener('click', openSidebar);
+closeSidebarBtn.addEventListener('click', closeSidebar);
 
 // Fermer le menu en cliquant en dehors
-document.addEventListener("click", (e) => {
+document.addEventListener('click', e => {
   if (
     !sidebar.contains(e.target) &&
     !toggleSidebarBtn.contains(e.target) &&
-    !sidebar.classList.contains("-translate-x-full")
+    !sidebar.classList.contains('-translate-x-full')
   ) {
     closeSidebar();
   }
@@ -82,12 +82,12 @@ document.addEventListener("click", (e) => {
 // Fonction pour obtenir l'adresse IP locale
 async function getLocalIP() {
   try {
-    const response = await fetch("https://api.ipify.org?format=json");
+    const response = await fetch('https://api.ipify.org?format=json');
     const data = await response.json();
     return data.ip;
   } catch (error) {
     console.error("Erreur lors de la récupération de l'IP:", error);
-    return "localhost";
+    return 'localhost';
   }
 }
 
@@ -98,48 +98,25 @@ async function initApp() {
 
   // Initialisation de Monaco Editor
   require.config({
-    paths: { vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs" },
+    paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.33.0/min/vs' },
   });
-  require(["vs/editor/editor.main"], function () {
+  require(['vs/editor/editor.main'], function () {
     // Création de l'éditeur
-    editor = monaco.editor.create(document.getElementById("editor-container"), {
-      value: "",
-      language: "javascript",
-      theme: "vs-dark",
+    editor = monaco.editor.create(document.getElementById('editor-container'), {
+      value: '// Commencez à coder ici...',
+      language: 'javascript',
+      theme: 'vs-dark',
       automaticLayout: true,
       minimap: { enabled: false },
       fontSize: 14,
-      fontFamily: "'Fira Code', monospace",
-      lineNumbers: "on",
+      lineNumbers: 'on',
       roundedSelection: false,
       scrollBeyondLastLine: false,
       readOnly: false,
-      cursorStyle: "line",
+      cursorStyle: 'line',
       tabSize: 2,
-      wordWrap: "on",
-      quickSuggestions: true,
-      snippetSuggestions: "inline",
-      padding: { top: 10 },
-      scrollbar: {
-        useShadows: false,
-        verticalHasArrows: false,
-        horizontalHasArrows: false,
-        vertical: "visible",
-        horizontal: "visible",
-        verticalScrollbarSize: 8,
-        horizontalScrollbarSize: 8,
-        arrowSize: 0,
-      },
-      overviewRulerBorder: false,
-      hideCursorInOverviewRuler: true,
-      renderLineHighlight: "none",
-      contextmenu: false,
-      lineDecorationsWidth: 0,
-      renderIndentGuides: false,
-      colorDecorators: false,
-      selectionHighlight: false,
-      renderWhitespace: "none",
-      occurrencesHighlight: false,
+      insertSpaces: true,
+      wordWrap: 'on',
     });
 
     // Initialiser le gestionnaire de recherche
@@ -158,25 +135,23 @@ async function initApp() {
     });
 
     // Gestion du menu contextuel
-    editor.onContextMenu((e) => {
+    editor.onContextMenu(e => {
       e.event.preventDefault();
       contextMenu.showEditorMenu(e.event.clientX, e.event.clientY, editor);
     });
 
     // Gestion des changements de langage
-    const languageSelect = document.getElementById("language-select");
-    languageSelect.addEventListener("change", function () {
+    const languageSelect = document.getElementById('language-select');
+    languageSelect.addEventListener('change', function () {
       const language = this.value;
       monaco.editor.setModelLanguage(editor.getModel(), language);
 
       // Activer/désactiver la prévisualisation Markdown
-      if (language === "markdown") {
-        const previewContainer = document.createElement("div");
-        previewContainer.id = "markdown-preview";
-        previewContainer.className = "markdown-preview";
-        document
-          .getElementById("editor-container")
-          .parentNode.appendChild(previewContainer);
+      if (language === 'markdown') {
+        const previewContainer = document.createElement('div');
+        previewContainer.id = 'markdown-preview';
+        previewContainer.className = 'markdown-preview';
+        document.getElementById('editor-container').parentNode.appendChild(previewContainer);
 
         // Mettre à jour la prévisualisation en temps réel
         editor.onDidChangeModelContent(() => {
@@ -187,7 +162,7 @@ async function initApp() {
         // Prévisualisation initiale
         previewContainer.innerHTML = previewMarkdown(editor.getValue());
       } else {
-        const previewContainer = document.getElementById("markdown-preview");
+        const previewContainer = document.getElementById('markdown-preview');
         if (previewContainer) {
           previewContainer.remove();
         }
@@ -195,20 +170,20 @@ async function initApp() {
     });
 
     // Gestion du bouton d'exécution
-    const runButton = document.getElementById("btn-run");
-    runButton.addEventListener("click", async function () {
+    const runButton = document.getElementById('btn-run');
+    runButton.addEventListener('click', async function () {
       const code = editor.getValue();
       const language = languageSelect.value;
 
       // Afficher un indicateur de chargement
       runButton.disabled = true;
-      runButton.textContent = "Exécution...";
+      runButton.textContent = 'Exécution...';
 
       try {
         const response = await fetch(`${API_URL}/execute`, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({ code, language }),
         });
@@ -222,44 +197,40 @@ async function initApp() {
           alert(`Résultat: ${result.output}`);
         }
       } catch (error) {
-        console.error("Erreur:", error);
+        console.error('Erreur:', error);
       } finally {
         // Réactiver le bouton
         runButton.disabled = false;
-        runButton.textContent = "Exécuter";
+        runButton.textContent = 'Exécuter';
       }
     });
 
     // Gestion de la navigation
-    const pages = ["home", "editor", "snippets", "settings"];
-    const buttons = pages.map((page) => document.getElementById(`btn-${page}`));
+    const pages = ['home', 'editor', 'snippets', 'settings'];
+    const buttons = pages.map(page => document.getElementById(`btn-${page}`));
 
     // Afficher la page d'accueil par défaut
-    document.getElementById("page-home").classList.remove("hidden");
-    buttons[0].classList.add("active");
+    document.getElementById('page-home').classList.remove('hidden');
+    buttons[0].classList.add('active');
 
     buttons.forEach((button, index) => {
-      button.addEventListener("click", () => {
+      button.addEventListener('click', () => {
         // Masquer toutes les pages
-        pages.forEach((page) =>
-          document.getElementById(`page-${page}`).classList.add("hidden")
-        );
+        pages.forEach(page => document.getElementById(`page-${page}`).classList.add('hidden'));
         // Afficher la page sélectionnée
-        document
-          .getElementById(`page-${pages[index]}`)
-          .classList.remove("hidden");
+        document.getElementById(`page-${pages[index]}`).classList.remove('hidden');
         // Mettre à jour les boutons actifs
-        buttons.forEach((btn) => btn.classList.remove("active"));
-        button.classList.add("active");
+        buttons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
       });
     });
 
     // Gestion du thème sombre
-    const toggleTheme = document.getElementById("toggle-theme");
-    toggleTheme.addEventListener("change", function () {
+    const toggleTheme = document.getElementById('toggle-theme');
+    toggleTheme.addEventListener('change', function () {
       const isDark = this.checked;
-      themeManager.changeTheme(isDark ? "dark" : "light");
-      monaco.editor.setTheme(isDark ? "vs-dark" : "vs-light");
+      themeManager.changeTheme(isDark ? 'dark' : 'light');
+      monaco.editor.setTheme(isDark ? 'vs-dark' : 'vs-light');
     });
 
     // Initialisation de Telegram WebApp
@@ -267,7 +238,7 @@ async function initApp() {
       const webapp = window.Telegram.WebApp;
       webapp.ready();
 
-      webapp.MainButton.setText("Envoyer au Bot");
+      webapp.MainButton.setText('Envoyer au Bot');
       webapp.MainButton.onClick(() => {
         if (fileManager.currentFile) {
           const code = editor.getValue();
@@ -285,10 +256,7 @@ async function initApp() {
       webapp.BackButton.onClick(() => {
         // Retour à la page précédente
         const currentPage = pages.find(
-          (page) =>
-            !document
-              .getElementById(`page-${page}`)
-              .classList.contains("hidden")
+          page => !document.getElementById(`page-${page}`).classList.contains('hidden')
         );
         const currentIndex = pages.indexOf(currentPage);
         if (currentIndex > 0) {
@@ -302,38 +270,32 @@ async function initApp() {
       searchManager.openSearch();
     });
 
-    editor.addCommand(
-      monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyF,
-      () => {
-        searchManager.openReplace();
-      }
-    );
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyF, () => {
+      searchManager.openReplace();
+    });
 
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyG, () => {
-      const line = prompt("Aller à la ligne:");
+      const line = prompt('Aller à la ligne:');
       if (line) {
         searchManager.goToLine(parseInt(line));
       }
     });
 
     // Ajouter le support des snippets
-    editor.addCommand(
-      monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyS,
-      () => {
-        snippetManager.createFromSelection(editor);
-      }
-    );
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyS, () => {
+      snippetManager.createFromSelection(editor);
+    });
   });
 }
 
 // Gestionnaire de fichiers
-async function createFile(name, content = "") {
+async function createFile(name, content = '') {
   try {
     const file = await fileManager.createFile(name, content);
     tabManager.createTab(file);
     openFile(file.path);
   } catch (error) {
-    console.error("Erreur lors de la création du fichier:", error);
+    console.error('Erreur lors de la création du fichier:', error);
   }
 }
 
@@ -356,53 +318,53 @@ async function saveFile() {
     await fileManager.saveFile(fileManager.currentFile.path, content);
     tabManager.markSaved(fileManager.currentFile.path);
   } catch (error) {
-    console.error("Erreur lors de la sauvegarde:", error);
+    console.error('Erreur lors de la sauvegarde:', error);
   }
 }
 
 function closeFile(path) {
   fileManager.closeFile(path);
   if (!fileManager.currentFile) {
-    editor.setValue("");
+    editor.setValue('');
   }
 }
 
 // Configuration du menu contextuel
 contextMenu.setCallbacks({
-  onRename: async (file) => {
-    const newName = prompt("Nouveau nom:", file.name);
+  onRename: async file => {
+    const newName = prompt('Nouveau nom:', file.name);
     if (newName && newName !== file.name) {
       try {
         await fileManager.renameFile(file.path, newName);
         tabManager.updateTabTitle(file.path, newName);
       } catch (error) {
-        console.error("Erreur lors du renommage:", error);
+        console.error('Erreur lors du renommage:', error);
       }
     }
   },
-  onDelete: async (file) => {
+  onDelete: async file => {
     if (confirm(`Supprimer ${file.name} ?`)) {
       try {
         await fileManager.deleteFile(file.path);
         tabManager.closeTab(file.path);
       } catch (error) {
-        console.error("Erreur lors de la suppression:", error);
+        console.error('Erreur lors de la suppression:', error);
       }
     }
   },
-  onNewFile: async (path) => {
-    const name = prompt("Nom du fichier:");
+  onNewFile: async path => {
+    const name = prompt('Nom du fichier:');
     if (name) {
       await createFile(name);
     }
   },
-  onNewFolder: async (path) => {
-    const name = prompt("Nom du dossier:");
+  onNewFolder: async path => {
+    const name = prompt('Nom du dossier:');
     if (name) {
       try {
         await fileManager.createFolder(path + name);
       } catch (error) {
-        console.error("Erreur lors de la création du dossier:", error);
+        console.error('Erreur lors de la création du dossier:', error);
       }
     }
   },
@@ -410,7 +372,7 @@ contextMenu.setCallbacks({
 
 // Restaurer l'état de l'éditeur
 function restoreEditorState() {
-  fileManager.openFiles.forEach((file) => {
+  fileManager.openFiles.forEach(file => {
     tabManager.createTab(file);
   });
 
@@ -420,17 +382,17 @@ function restoreEditorState() {
 }
 
 // Raccourcis clavier
-document.addEventListener("keydown", async (e) => {
+document.addEventListener('keydown', async e => {
   // Ctrl/Cmd + S pour sauvegarder
-  if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
     e.preventDefault();
     await saveFile();
   }
 
   // Ctrl/Cmd + N pour nouveau fichier
-  if ((e.ctrlKey || e.metaKey) && e.key === "n") {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
     e.preventDefault();
-    const name = prompt("Nom du fichier:");
+    const name = prompt('Nom du fichier:');
     if (name) {
       await createFile(name);
     }
@@ -438,30 +400,30 @@ document.addEventListener("keydown", async (e) => {
 });
 
 // Événements de la barre d'outils
-document.querySelectorAll(".toolbar-button").forEach((button) => {
-  button.addEventListener("click", async (e) => {
-    const action = button.getAttribute("data-action");
+document.querySelectorAll('.toolbar-button').forEach(button => {
+  button.addEventListener('click', async e => {
+    const action = button.getAttribute('data-action');
     switch (action) {
-      case "new":
-        const name = prompt("Nom du fichier:");
+      case 'new':
+        const name = prompt('Nom du fichier:');
         if (name) await createFile(name);
         break;
-      case "save":
+      case 'save':
         await saveFile();
         break;
-      case "undo":
-        editor?.trigger("keyboard", "undo");
+      case 'undo':
+        editor?.trigger('keyboard', 'undo');
         break;
-      case "redo":
-        editor?.trigger("keyboard", "redo");
+      case 'redo':
+        editor?.trigger('keyboard', 'redo');
         break;
-      case "search":
+      case 'search':
         searchManager?.openSearch();
         break;
-      case "replace":
+      case 'replace':
         searchManager?.openReplace();
         break;
-      case "snippet":
+      case 'snippet':
         const snippets = snippetManager.getAllSnippets();
         if (snippets.length > 0) {
           const snippet = snippets[0]; // À remplacer par une UI de sélection
@@ -471,6 +433,135 @@ document.querySelectorAll(".toolbar-button").forEach((button) => {
     }
   });
 });
+
+// Gestion du thème
+const darkModeToggle = document.getElementById('darkModeToggle');
+const html = document.documentElement;
+
+function updateTheme(isDark) {
+  if (isDark) {
+    html.classList.add('dark');
+    editor.updateOptions({ theme: 'vs-dark' });
+  } else {
+    html.classList.remove('dark');
+    editor.updateOptions({ theme: 'vs-light' });
+  }
+  localStorage.setItem('darkMode', isDark);
+}
+
+// Restaurer le thème sauvegardé
+const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+darkModeToggle.checked = savedDarkMode;
+updateTheme(savedDarkMode);
+
+darkModeToggle.addEventListener('change', e => {
+  updateTheme(e.target.checked);
+});
+
+// Gestion de la sidebar
+const menuButton = document.getElementById('menuButton');
+const closeSidebarButton = document.getElementById('closeSidebar');
+const sidebar = document.getElementById('sidebar');
+
+menuButton.addEventListener('click', () => {
+  sidebar.classList.remove('-translate-x-full');
+});
+
+closeSidebarButton.addEventListener('click', () => {
+  sidebar.classList.add('-translate-x-full');
+});
+
+// Gestion des snippets
+const snippetsDrawer = document.getElementById('snippetsDrawer');
+const newSnippetButton = document.getElementById('newSnippet');
+const closeSnippetsButton = document.getElementById('closeSnippets');
+
+function toggleSnippetsDrawer(show) {
+  snippetsDrawer.style.transform = show ? 'translateY(0)' : 'translateY(100%)';
+}
+
+newSnippetButton.addEventListener('click', () => {
+  toggleSnippetsDrawer(true);
+});
+
+closeSnippetsButton.addEventListener('click', () => {
+  toggleSnippetsDrawer(false);
+});
+
+// Gestion des paramètres
+const settingsModal = document.getElementById('settingsModal');
+const closeSettingsButton = document.getElementById('closeSettings');
+const fontSizeSlider = document.getElementById('fontSizeSlider');
+
+function toggleSettingsModal(show) {
+  settingsModal.classList.toggle('hidden', !show);
+}
+
+document.querySelector('button[title="Paramètres"]').addEventListener('click', () => {
+  toggleSettingsModal(true);
+});
+
+closeSettingsButton.addEventListener('click', () => {
+  toggleSettingsModal(false);
+});
+
+// Gestion de la taille de police
+fontSizeSlider.addEventListener('input', e => {
+  const size = parseInt(e.target.value);
+  editor.updateOptions({ fontSize: size });
+  localStorage.setItem('fontSize', size);
+});
+
+// Restaurer la taille de police sauvegardée
+const savedFontSize = localStorage.getItem('fontSize');
+if (savedFontSize) {
+  fontSizeSlider.value = savedFontSize;
+  editor.updateOptions({ fontSize: parseInt(savedFontSize) });
+}
+
+// Gestion de l'aperçu
+const previewFrame = document.getElementById('previewFrame');
+let previewTimeout;
+
+editor.onDidChangeModelContent(() => {
+  clearTimeout(previewTimeout);
+  previewTimeout = setTimeout(() => {
+    const content = editor.getValue();
+    const blob = new Blob([content], { type: 'text/html' });
+    previewFrame.src = URL.createObjectURL(blob);
+  }, 1000);
+});
+
+// Gestion de la sauvegarde automatique
+const autoSaveToggle = document.getElementById('autoSaveToggle');
+let autoSaveInterval;
+
+function toggleAutoSave(enabled) {
+  if (enabled) {
+    autoSaveInterval = setInterval(() => {
+      const content = editor.getValue();
+      localStorage.setItem('autoSavedContent', content);
+    }, 30000); // Sauvegarde toutes les 30 secondes
+  } else {
+    clearInterval(autoSaveInterval);
+  }
+  localStorage.setItem('autoSave', enabled);
+}
+
+// Restaurer le paramètre de sauvegarde automatique
+const savedAutoSave = localStorage.getItem('autoSave') === 'true';
+autoSaveToggle.checked = savedAutoSave;
+toggleAutoSave(savedAutoSave);
+
+autoSaveToggle.addEventListener('change', e => {
+  toggleAutoSave(e.target.checked);
+});
+
+// Restaurer le contenu sauvegardé automatiquement
+const savedContent = localStorage.getItem('autoSavedContent');
+if (savedContent) {
+  editor.setValue(savedContent);
+}
 
 // Démarrer l'application
 initApp();

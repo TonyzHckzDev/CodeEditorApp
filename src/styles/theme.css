@@ -27,6 +27,24 @@
   --success-color: #2ecc71;
   --warning-color: #f1c40f;
   --info-color: #3498db;
+
+  /* Couleurs Telegram */
+  --telegram-blue: #2ca5e0;
+  --telegram-blue-hover: #229ed9;
+
+  /* Thème clair */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f3f4f6;
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --border-color: #e5e7eb;
+
+  /* Thème sombre */
+  --dark-bg-primary: #1f2937;
+  --dark-bg-secondary: #111827;
+  --dark-text-primary: #f9fafb;
+  --dark-text-secondary: #d1d5db;
+  --dark-border-color: #374151;
 }
 
 /* Classes de thème */
@@ -53,14 +71,12 @@ body {
   color: var(--text-primary);
   margin: 0;
   padding: 0;
-  font-family: "Inter", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Empêcher l'ajustement automatique de la taille du texte sur les appareils mobiles */
-  -webkit-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
   transition: background-color 0.3s ease, color 0.3s ease;
   min-height: 100vh;
 }
@@ -833,7 +849,7 @@ body {
   background-color: var(--bg-secondary);
   padding: 0.2em 0.4em;
   border-radius: 3px;
-  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.9em;
 }
 
@@ -910,7 +926,7 @@ body {
 }
 
 /* Styles pour les listes de tâches */
-.markdown-preview input[type="checkbox"] {
+.markdown-preview input[type='checkbox'] {
   margin-right: 0.5rem;
   -webkit-user-select: none;
   user-select: none;
@@ -986,5 +1002,98 @@ body {
 
   .toolbar button {
     padding: 0.25rem;
+  }
+}
+
+/* Switch styles */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--telegram-blue);
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* Transitions */
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: var(--dark-bg-primary);
+    --bg-secondary: var(--dark-bg-secondary);
+    --text-primary: var(--dark-text-primary);
+    --text-secondary: var(--dark-text-secondary);
+    --border-color: var(--dark-border-color);
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--dark-bg-secondary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #666;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #888;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .switch {
+    width: 40px;
+    height: 20px;
+  }
+
+  .slider:before {
+    height: 16px;
+    width: 16px;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(20px);
   }
 }

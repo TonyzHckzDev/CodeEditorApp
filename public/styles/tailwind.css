@@ -358,11 +358,14 @@ html,
   line-height: 1.5;
   /* 1 */
   -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   /* 2 */
-  -moz-tab-size: 4;
+  tab-size: 4;
   /* 3 */
-  -o-tab-size: 4;
-     tab-size: 4;
+  -moz-tab-size: 4;
+  tab-size: 4;
   /* 3 */
   font-family: Inter, sans-serif;
   /* 4 */
@@ -965,11 +968,12 @@ html,
   /* 1 */
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
   /* 2 */
-  -moz-tab-size: 4;
+  tab-size: 4;
   /* 3 */
-  -o-tab-size: 4;
+  -moz-tab-size: 4;
   tab-size: 4;
   /* 3 */
   font-family: Inter, sans-serif;
@@ -1654,6 +1658,7 @@ html,
 .text-size-adjust {
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
@@ -1674,7 +1679,8 @@ html {
   color-scheme: light;
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
-       text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 html.dark {
@@ -1690,6 +1696,7 @@ body {
   flex-direction: column;
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
   margin: 0;
   line-height: inherit;
@@ -2206,6 +2213,7 @@ input[type="number"] {
 .text-size-adjust {
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
